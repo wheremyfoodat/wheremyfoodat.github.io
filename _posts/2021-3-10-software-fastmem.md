@@ -135,7 +135,7 @@ Let's start by populating our read page table first
 // map KUSEG WRAM first
 const uint32_t PAGE_SIZE = 64 * 1024; // Page size = 64KB
 
-for (auto pageIndex = 0; pageIndex < 128; pageIndex++) { // The actual RAM is 16 pages big, but it's usually mirrored 4 times 
+for (auto pageIndex = 0; pageIndex < 128; pageIndex++) { // The actual RAM is 32 pages big, but it's usually mirrored 4 times 
     const auto pointer = (uintptr_t) &WRAM [(pageIndex * PAGE_SIZE) & 0x1FFFFF]; // pointer to page #pageIndex of RAM. The & at the end is meant to make it wrap every 2MB
     pageTableR [pageIndex + 0x0000] = pointer; // map this page to KUSEG RAM
     pageTableR [pageIndex + 0x8000] = pointer; // Same for KSEG0
