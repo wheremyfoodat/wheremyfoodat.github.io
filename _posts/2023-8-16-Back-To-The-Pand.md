@@ -2,7 +2,7 @@
 
 So, anybody who has read this blog before probably has noticed that it's been a hot minute since the last post. You may have wondered, "what the fuck could this guy have been doing for so long" or "is he ever going to post again?". In fact, my last blog was a huge monologue about doing FPU stuff in x86 assembly, something that only someone who's probably lost it would do
 
-If you're seeing this post however, you've probably seen [Panda3DS](https://github.com/wheremyfoodat/Panda3DS), the new 3DS I started in late 2022 (First commit being on September 15 2022). Nowadays Panda3DS can boot and play a pleasant amount of games, with 2 official preview builds. If you'd like a small teaser, [I've also uploaded a cute little video of it on Youtube](https://www.youtube.com/watch?v=xVp9skFz1kk). So, today I'm going to talk about how it all started, documenting some of the Nintendo 3DS software and hardware stack along the way. 
+If you're seeing this post however, you've probably seen [Panda3DS](https://github.com/wheremyfoodat/Panda3DS), the new 3DS emulator I started in late 2022 (First commit being on September 15 2022). Nowadays Panda3DS can boot and play a pleasant amount of games, with 2 official preview builds. If you'd like a small teaser, [I've also uploaded a cute little video of it on Youtube](https://www.youtube.com/watch?v=xVp9skFz1kk). So, today I'm going to talk about how it all started, documenting some of the Nintendo 3DS software and hardware stack along the way. 
 
 In this post, I will be covering how the development process went up until the first game (Ocarina of Time 3D) booted. If there's demand for it, I can also make more blog posts, documenting either specific parts of the 3DS, or more of my development process. This is also a rather large post, so you may be interested in skipping to a specific part of it.
 
@@ -121,7 +121,7 @@ I will be getting more in-depth about the PICA200 architecture in another blog, 
 # Going beyond the triangle™
 After getting the triangle, I decided to try my luck going further. I booted some more homebrew and implemented a bunch of stuff that would take too much space to talk about in this blog post. Soon, it was time to try a real game!
 
-I decided that game would be The Legend oF Zelda: Ocarina of Time 3D, since that was one of the first games [Citra](https://github.com/citra-emu/citra) and [Corgi3DS](https://github.com/PSI-Rockin/Corgi3DS) ran. So the first thing to do was take an (unencrypted, to begin with) ROM and try to load it.
+I decided that game would be The Legend Of Zelda: Ocarina of Time 3D, since that was one of the first games [Citra](https://github.com/citra-emu/citra) and [Corgi3DS](https://github.com/PSI-Rockin/Corgi3DS) ran. So the first thing to do was take an (unencrypted, to begin with) ROM and try to load it.
 
 Of course, 3DS games are not in .elf format because that would be too simple. Instead, .3ds files are in [NCSD format](https://www.3dbrew.org/wiki/NCSD), a container format that contains a header, and several [NCCH](https://www.3dbrew.org/wiki/NCCH) partitions.
 
