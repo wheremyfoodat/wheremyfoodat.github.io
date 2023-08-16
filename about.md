@@ -1,7 +1,11 @@
-Argue with me on Discord: guccirodakino#0969
+Argue with me on Discord: guccirodakino
 <br>
-Add me on Nintendo Switch Online: SW-8356-6970-6111
+Add me on Nintendo Switch Online so we can gaming: SW-8356-6970-6111
 <br>
-Give me clout on github/instagram/gmail by pressing on the icons at the bottom of the page.
+See red pandas with us in the [Panda3DS discord server](https://discord.com/invite/ZYbugsEmsw)
 <br>
-Patreon/Onlyfans coming soon.
+Give me starz on github by pressing on the icon at the bottom of the page.
+<br>
+Patreon: https://www.patreon.com/wheremyfoodat
+<br>
+Onlyfans soon!
