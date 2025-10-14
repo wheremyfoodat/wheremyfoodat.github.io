@@ -1,7 +1,7 @@
 # The x86 ISA and floating point arithmetic
 
 # Introduction
-The following text is not meant to educate the reader on every single of how floating point arithmetic works. Au contraire, it aims to demystify the way it works on x86, and serve as a tutorial for high-level-language programmers on how to (ab)use it.
+The following text is not meant to educate the reader on every single detail of how floating point arithmetic works. Au contraire, it aims to demystify the basics of how it works on x86, and serve as a tutorial for high-level language programmers on how to write floating point code in assembly, primarily for software optimization and other low-level purposes (such as Just-In-Time recompilers).
 
 # History
 Introduced on June 8, 1978 with the release of the [Intel 8086](https://en.wikipedia.org/wiki/Intel_8086), x86 initially lacked any way to do floating point arithmetic. In that era, where CPUs were barely competent at doing anything, almost everything revolved around integer arithmetic. In order to represent fractional values, developers would often use fixed-point arithmetic. That is, splitting a plain integer into an integer part and a fractional part, and work with it via regular integer arithmetic.

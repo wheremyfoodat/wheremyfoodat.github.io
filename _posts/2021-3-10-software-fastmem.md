@@ -63,7 +63,7 @@ uint32_t read32 (uint32_t address) {
     const auto mask = REGION_MASKS [region_bits]; // fetch the correct mask from the mask table
     const auto paddr = address & mask; // paddr -> physical address
 
-    // Now that we've essentially gotten rid of the segment shit, we only need 1 check to see if we're accessing WRAM, BIOS etc, regardless of *which* segment we're accessing
+    // Now that we've essentially gotten rid of the segment bits, we only need 1 check to see if we're accessing WRAM, BIOS etc, regardless of *which* segment we're accessing
     if (paddr < 0x7FFFFF) // first 8MB of memory 
         return WRAM [address & 0x1FFFFF]; // Mirror every 2MB
     ... etc
@@ -89,11 +89,11 @@ Let's bring back the previous picture.
 Out of these ranges, the important ones are:
 - Main RAM: The core of the system. A lot of data is stored here. The freaking kernel is stored here. Most code is also stored here. A vast majority of memory reads, especially instruction reads, will target Main RAM. As previously mentioned, Main RAM is thankfully the most straightforward memory region on the system, and we categorized it as a "fast" range
 
-- IO ports: These are used to access all peripherals, including the GPU (via GP0 and GP1), the Macroblock Decoder (a hardware FMV decoder, known as MDEC), the Sound Processing Unit (SPU), the CD-ROM, the controllers, the timers, and more! Accessing these memory addresses can have a metric shit ton of side effects, making them what we call *slow areas*
+- IO ports: These are used to access all peripherals, including the GPU (via GP0 and GP1), the Macroblock Decoder (a hardware FMV decoder, known as MDEC), the Sound Processing Unit (SPU), the CD-ROM, the controllers, the timers, and more! Accessing these memory addresses can have side effects, making them what we call *slow areas*
 
 - Scratchpad: A fast but tiny RAM area, which is only accessible via data reads and not instruction reads. Mostly used for storing super small amounts of data, as it can barely fit **256 integers**. As you can see from the screenshot, it resides in the 0x1F80xxxx area, alongside IO. This will come into play later
 
-- [BIOS ROM](https://psx-spx.consoledev.net/kernelbios/): The BIOS (no shit) of the system. This is responsible for "waking up" the system from a cold boot, setting up the kernel (which resides in the first 64KB of Main RAM), [storing data which can be accessed via system calls](https://psx-spx.consoledev.net/kernelbios/#bios-character-sets), and a couple other stuff. This is a read-only area - in contrast to the kernel - which resides in main RAM and is actually **very frequently patched by commercial games**. Alongside Main RAM, this is the other main place the CPU will execute instructions from.
+- [BIOS ROM](https://psx-spx.consoledev.net/kernelbios/): The BIOS (no way!) of the system. This is responsible for "waking up" the system from a cold boot, setting up the kernel (which resides in the first 64KB of Main RAM), [storing data which can be accessed via system calls](https://psx-spx.consoledev.net/kernelbios/#bios-character-sets), and a couple other stuff. This is a read-only area - in contrast to the kernel - which resides in main RAM and is actually **very frequently patched by commercial games**. Alongside Main RAM, this is the other main place the CPU will execute instructions from.
 
 # Actually implementing the damn thing
 Now that we got all the lore out of the way, we can finally get to writing code (yay!). The concept of fastmem is simple, albeit the execution is more tricky. In essence, you want to split the address space into fast and slow pages using a page table; for fast pages, you can access them directly via a pointer without a care in the world, while for slow pages, such as IO, you'll have to do some work.
