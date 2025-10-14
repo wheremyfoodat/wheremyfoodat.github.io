@@ -34,7 +34,7 @@ fadd st(1), st(0) ; store result in st(1)
 
 If one wanted to add the registers st(1) and st(2)... they'd be very disappointed to learn that due to x87 being insane and garbage, it demands that one of the operands is st(0), so you'd have to move values around the register stack. The same goes for instructions like fsub, fdiv, fmul, etc. Other instructions, like `fsin`, refuse to have any operand other than st(0) (implicitly), because as previously mentioned, x87 is very much accumulator-oriented, with st(0) being the accumulator.
 
-The first SIMD extension x86 introduced, named [MMX (Bullshit acronym, let' say it stands for MultiMedia eXtension)](https://en.wikipedia.org/wiki/MMX_(instruction_set)) actually re-uses the x87 register stack, and aliases the low 64 bits of each register to one of the MMX registers (mm0-mm7). This means that... using MMX and x87 together is **catastrophic**, and one has to signal the end of an MMX instruction block with the `emms` instruction like this.
+The first SIMD extension x86 introduced, named [MMX (Officially a meaningless acronym, let's assume it stands for MultiMedia eXtension)](https://en.wikipedia.org/wiki/MMX_(instruction_set)) actually re-uses the x87 register stack, and aliases the low 64 bits of each register to one of the MMX registers (mm0-mm7). This means that... using MMX and x87 together is **catastrophic**, and one has to signal the end of an MMX instruction block with the `emms` instruction like this.
 
 ```nasm
 movq mm0, rax
@@ -126,15 +126,15 @@ This is a bit of a pain in the ass, cause SSE doesn't really support immediates 
 
 ```nasm
 movss xmm1, xmm0 ; move a to xmm1
-movss xmm0, [rel .my_fucking_constant] ; move 1.0 to xmm0 with
+movss xmm0, [rel .my_constant] ; move 1.0 to xmm0 with
 divss xmm0, xmm1 ; divide xmm0 by xmm1, result in xmm0
 ret
 
-.my_fucking_constant:
+.my_constant:
     dd 1.0
 ```
 
-# Where muh floating point comparisons
+# Where are my floating point comparisons
 Comparisons with SSE floats/doubles aren't too hard, after you get past the **insane** mnemonics. You simply compare 2 floating point operands, and the flags are set in EFLAGS in a similar manner to how they're set with integer operation
 
 Let's try converting this simple C program to x86
@@ -150,11 +150,11 @@ We want to compare a float and another float. So we'll use `comiss` (Compare Sca
 mov eax, 420 ; return value if condition is untrue
 mov ecx, 69  ; return value if condition is true
 
-comiss xmm0, [rel .my_fucking_constant] ; compare a and 3.0
+comiss xmm0, [rel .my_constant] ; compare a and 3.0
 cmova eax, ecx ; If xmm0 is above 3.0, move ecx to eax
 ret
 
-.my_fucking_constant:
+.my_constant:
     dd 3.0
 ```
 Similarly, if `a` were a double, we'd merely change `comiss` to `comisd` and use `dq 3.0` instead of `dd 3.0`
@@ -261,10 +261,10 @@ AVX later on added stuff like fused multiply-add, which you can find on felixclo
 # Some convert instructions
 ![Imgur](https://imgur.com/wz2UxmZ.png)
 
-# Does my computer have SSE?
-Every x86-64 implementation must support SSE2 at the very minimum, while most modern CPUs will support all SSE versions + AVX, and very likely AVX2. AVX-512 on the other hand is quite rare.
+# Which version of SSE/AVX should I use
+Every x86-64 implementation must support SSE2 at the very minimum, while most modern consumer CPUs will support all SSE versions + AVX, and most likely AVX2. AVX-512 on the other hand is not quite common in consumer CPUs yet.
 
-This is when each SSE/AVX iteration was first established.
+This is when each SSE/AVX version was first released:
 
 - SSE (1999)
 - SSE2 (2001)
@@ -275,4 +275,4 @@ This is when each SSE/AVX iteration was first established.
 - AVX2 (2013)
 - AVX-512 (2015, still not widely available)
 
-Knowing this, choose which ones you're willing to use.
+Knowing this, you can decide which one to use. SSE2 is generally a safe baseline, as most people are using x86-64 CPUs nowadays. A fairly common apporach is to implement different code paths for different extensions (eg an SSE2 path and an AVX2 path), and choose between them at runtime, identifying which extensions are present using the `CPUID` instruction.
